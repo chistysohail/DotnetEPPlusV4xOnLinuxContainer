@@ -1,22 +1,32 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
-WORKDIR /app
-
+# Use the .NET SDK as the build environment
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["DotnetEPPlusV4xOnLinuxContainer/DotnetEPPlusV4xOnLinuxContainer.csproj", "DotnetEPPlusV4xOnLinuxContainer/"]
-RUN dotnet restore "./DotnetEPPlusV4xOnLinuxContainer/DotnetEPPlusV4xOnLinuxContainer.csproj"
-COPY . .
-WORKDIR "/src/DotnetEPPlusV4xOnLinuxContainer"
-RUN dotnet build "./DotnetEPPlusV4xOnLinuxContainer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./DotnetEPPlusV4xOnLinuxContainer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Copy the solution file and the project files
+COPY ../DotnetEPPlusV4xOnLinuxContainer.sln ./
+COPY ./DotnetEPPlusV4xOnLinuxContainer/DotnetEPPlusV4xOnLinuxContainer.csproj ./DotnetEPPlusV4xOnLinuxContainer/
 
-FROM base AS final
+# Restore the dependencies
+RUN dotnet restore
+
+# Copy the rest of the application
+COPY ./DotnetEPPlusV4xOnLinuxContainer ./DotnetEPPlusV4xOnLinuxContainer/
+
+WORKDIR /src/DotnetEPPlusV4xOnLinuxContainer
+RUN dotnet publish -c $BUILD_CONFIGURATION -o /app
+
+# Use the runtime image for the final container
+FROM mcr.microsoft.com/dotnet/runtime:6.0 AS final
+
+# Install dependencies for System.Drawing.Common (libgdiplus)
+RUN apt-get update && \
+    apt-get install -y libgdiplus && \
+    apt-get clean && \
+    ln -s /usr/lib/libgdiplus.so /usr/lib/gdiplus.dll
+
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app .
+
+# Set the entry point for the application
 ENTRYPOINT ["dotnet", "DotnetEPPlusV4xOnLinuxContainer.dll"]
