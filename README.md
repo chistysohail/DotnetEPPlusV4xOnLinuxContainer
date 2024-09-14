@@ -10,8 +10,8 @@ Build and Run the Docker Image
 1. Build the Docker Image
 To build the Docker image, run the following command from the root directory (where DotnetEPPlusV4xOnLinuxContainer.sln is located):
 docker build -t dotnetepplusv4xonlinuxcontainer -f DotnetEPPlusV4xOnLinuxContainer/Dockerfile .
-This command will:
 
+This command will:
 Use the .NET SDK image to build the project.
 Install libgdiplus for handling System.Drawing in Linux.
 Create a runtime image that includes the application.
