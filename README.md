@@ -29,7 +29,6 @@ docker run -it --entrypoint /bin/bash dotnetepplusv4xonlinuxcontainer
 Inside the container, use this command to find the libgdiplus.so file:
 find / -name "libgdiplus.so"
 
-Additional Information
 libgdiplus: This library is required for System.Drawing functionality in Linux-based environments. It is installed during the Docker build process.
 Multi-stage Dockerfile: This Dockerfile uses a multi-stage build to keep the final container lightweight by including only the necessary runtime files.
 
