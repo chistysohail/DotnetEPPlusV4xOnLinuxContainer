@@ -1,4 +1,4 @@
-DotnetEPPlusV4xOnLinuxContainer
+Dotnet Excel EPPlus (v 4.x) On Linux Container
 
 This project is a .NET 6 console application that runs inside a Docker container. The container is set up to handle System.Drawing operations using libgdiplus, which is required for drawing and image manipulation in Linux environments.
 
