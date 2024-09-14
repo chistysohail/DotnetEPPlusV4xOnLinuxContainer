@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DotnetEPPlusV4xOnLinuxContainer": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
