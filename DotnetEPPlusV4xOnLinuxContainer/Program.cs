@@ -32,7 +32,7 @@ class Program
             worksheet.Cells[startRow - 2, startCol].Style.Fill.BackgroundColor.SetColor(Color.LightBlue);
             worksheet.Cells[startRow - 2, startCol].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-            // Load DataTable into worksheet starting from the row 3
+            // Load DataTable into worksheet starting from row 3
             worksheet.Cells[startRow, startCol].LoadFromDataTable(dataTable, true);
 
             // Style for the header row
@@ -55,6 +55,9 @@ class Program
                 dataRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
                 dataRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             }
+
+            // Apply AutoFitColumns to the specific range (the entire table in this case)
+            worksheet.Cells[startRow, startCol, startRow + dataTable.Rows.Count, startCol + dataTable.Columns.Count - 1].AutoFitColumns();
 
             // Auto-fit columns for better visibility
             worksheet.Cells.AutoFitColumns();
